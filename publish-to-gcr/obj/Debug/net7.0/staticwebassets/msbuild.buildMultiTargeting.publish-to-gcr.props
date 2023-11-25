@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/publish-to-gcr.props" />
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>publish_to_gcr</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include=".github\workflows\publish.yml" />
+    </ItemGroup>
+
+</Project>
