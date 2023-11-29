@@ -55,4 +55,13 @@ jobs:
           password: "NARTE@2023#"
           port: "22"
           script_stop: true
+          script: |
+            # Pull the Docker image from the container registry
+            docker pull ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
+
+            
+
+            # Cleanup
+            exit
+            EOF
           
