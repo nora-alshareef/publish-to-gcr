@@ -1,0 +1,68 @@
+name: "Deploy Docker Image"
+
+# The workflow to execute on is comments that are newly created
+on:
+  issue_comment:
+    types: [created]
+
+# Permissions needed for reacting and adding comments for IssueOps commands
+permissions:
+  pull-requests: write
+  deployments: write
+  contents: write
+  checks: read
+
+jobs:
+  check-approval:
+    if: ${{ github.event.issue.pull_request }} # only run on pull request comments
+    runs-on: ubuntu-latest
+    steps:
+      # Execute IssueOps branch deployment logic, hooray!
+      # This will be used to "gate" all future steps below and conditionally trigger steps/deployments
+      - name: branch-deploy
+        id: branch-deploy
+        uses: github/branch-deploy@vX.X.X
+        with:
+          trigger: ".deploy"
+          reaction: "eyes"
+          environment: "production"
+          stable_branch: "main"
+
+        # Deploy our branch via SSH remote commands
+  deploy:
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name : Echo Approval Check 
+        run: |
+          echo "Continue? : ${{ steps.branch-deploy.outputs.continue }}"
+
+      - name: SSH Remote Deploy
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883 # pin@v0.1.6
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: |
+            # Connect to the application server via SSH
+            ssh -p ${{ secrets.SSH_PORT }} -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.APP_SERVER_USERNAME }}@${{ secrets.APP_SERVER_HOST }} << EOF
+
+            # Pull the Docker image from the container registry
+            docker pull [registry_address]/[image_name]:[image_tag]
+
+            # Stop and remove any existing container
+            docker stop [container_name] || true
+            docker rm [container_name] || true
+
+            # Run a container using the pulled image
+            docker run -d --name [container_name] [registry_address]/[image_name]:[image_tag]
+
+            # Cleanup
+            exit
+            EOF
