@@ -18,6 +18,8 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  #tag representation YY.MM.release#
+  TAG: ${{ format('{0:%y}.{0:%m}.release{1}', github.event.created_at, github.run_number) }}
 
 
 jobs:
