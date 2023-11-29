@@ -13,12 +13,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  #tag representation YY.MM.release#
 
 
 jobs:
@@ -33,6 +33,10 @@ jobs:
       id-token: write
 
     steps:
+      - name: set release date
+        run: |
+          echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
+          
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -58,7 +62,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{RELEASE_DATE}}
       - name: Echo Docker metadata
         run: |
           echo "Tags: ${{ steps.meta.outputs.tags }}"
