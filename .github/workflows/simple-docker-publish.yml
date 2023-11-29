@@ -9,7 +9,7 @@ on:
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
-    #tags: [ 'v*.*.*' ]
+    tags: [ 'v1.0.0' ]
   pull_request:
     branches: [ "main" ]
 
@@ -19,7 +19,6 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   #tag representation YY.MM.release#
-  TAG: ${{ format('{0:%Y-%m-%d}') }}
 
 
 jobs:
