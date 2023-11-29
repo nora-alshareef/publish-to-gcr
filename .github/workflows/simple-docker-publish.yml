@@ -19,7 +19,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   #tag representation YY.MM.release#
-  TAG: ${{ format('{0:%Y-%m-%d}', github.event.created_at) }}
+  TAG: ${{ format('{0:%Y-%m-%d}') }}
 
 
 jobs:
