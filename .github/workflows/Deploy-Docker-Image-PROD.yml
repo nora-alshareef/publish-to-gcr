@@ -49,11 +49,11 @@ jobs:
         #if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883 # pin@v0.1.6
         with:
-          host: 172.232.217.78
-          username: root
+          host: "172.232.217.78"
+          username: "root"
           #key: ${{ secrets.SSH_KEY }}
-          password: NARTE@2023#
-          port: 22
+          password: "NARTE@2023#"
+          port: "22"
           script_stop: true
           script: |
             # Pull the Docker image from the container registry
