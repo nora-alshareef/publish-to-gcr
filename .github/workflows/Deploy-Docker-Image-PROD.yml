@@ -59,6 +59,12 @@ jobs:
             # Pull the Docker image from the container registry
             docker pull ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
 
+            # Stop and remove any existing container
+            #docker stop [container_name] || true
+            #docker rm [container_name] || true
+
+            # Run a container using the pulled image
+            docker run ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
             
 
             # Cleanup
