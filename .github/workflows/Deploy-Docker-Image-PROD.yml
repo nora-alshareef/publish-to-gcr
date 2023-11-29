@@ -55,9 +55,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            # Connect to the application server via SSH
-            ssh -p ${{ secrets.SSH_PORT }} -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.APP_SERVER_USERNAME }}@${{ secrets.APP_SERVER_HOST }} << EOF
-
             # Pull the Docker image from the container registry
             docker pull [registry_address]/[image_name]:[image_tag]
 
