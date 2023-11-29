@@ -55,17 +55,4 @@ jobs:
           password: "NARTE@2023#"
           port: "22"
           script_stop: true
-          script: |
-            # Pull the Docker image from the container registry
-            docker pull [registry_address]/[image_name]:[image_tag]
-
-            # Stop and remove any existing container
-            docker stop [container_name] || true
-            docker rm [container_name] || true
-
-            # Run a container using the pulled image
-            docker run -d --name [container_name] [registry_address]/[image_name]:[image_tag]
-
-            # Cleanup
-            exit
-            EOF
+          
