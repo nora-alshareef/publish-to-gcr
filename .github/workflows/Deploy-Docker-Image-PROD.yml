@@ -51,7 +51,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          #key: ${{ secrets.SSH_KEY }}
+          password: NARTE@2023#
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
