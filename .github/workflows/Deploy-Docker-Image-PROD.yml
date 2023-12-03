@@ -1,21 +1,21 @@
 name: "Deploy Docker Image"
 
-on:
-  push:
-    branches:
-      - main
+#on:
+ # push:
+   # branches:
+      #- main
 
 # The workflow to execute on is comments that are newly created
-#on:
-  #issue_comment:
-    #types: [created]
+on:
+  issue_comment:
+    types: [created]
 
 # Permissions needed for reacting and adding comments for IssueOps commands
-#permissions:
-  #pull-requests: write
-  #deployments: write
-  #contents: write
-  #checks: read
+permissions:
+  pull-requests: write
+  deployments: write
+  contents: write
+  checks: read
 
   #check-approval:
     #if: ${{ github.event.issue.pull_request }} # only run on pull request comments
@@ -35,9 +35,20 @@ on:
         # Deploy our branch via SSH remote commands
 jobs:
   deploy:
-      runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request }} # only run on pull request comments
+    runs-on: ubuntu-latest
+    steps:
+      # Execute IssueOps branch deployment logic, hooray!
+      # This will be used to "gate" all future steps below and conditionally trigger steps/deployments
+      - uses: github/branch-deploy@vX.X.X
+        id: branch-deploy
+        with:
+          trigger: ".deploy"
 
-      steps:
+      # Run your deployment logic for your project here
+      #runs-on: ubuntu-latest
+
+      #steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
