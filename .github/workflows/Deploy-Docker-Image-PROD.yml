@@ -1,5 +1,10 @@
 name: "Deploy Docker Image"
 
+#on:
+ # push:
+   # branches:
+      #- main
+
 # The workflow to execute on is comments that are newly created
 on:
   issue_comment:
@@ -12,27 +17,41 @@ permissions:
   contents: write
   checks: read
 
+  #check-approval:
+    #if: ${{ github.event.issue.pull_request }} # only run on pull request comments
+    #runs-on: ubuntu-latest
+    #steps:
+      # Execute IssueOps branch deployment logic, hooray!
+      # This will be used to "gate" all future steps below and conditionally trigger steps/deployments
+      #- name: branch-deploy
+        #id: branch-deploy
+        #uses: github/branch-deploy@v8.0.0
+        #with:
+          #trigger: ".deploy"
+          #reaction: "eyes"
+          #environment: "production"
+          #stable_branch: "main"
+
+        # Deploy our branch via SSH remote commands
 jobs:
-  check-approval:
+  deploy:
     if: ${{ github.event.issue.pull_request }} # only run on pull request comments
     runs-on: ubuntu-latest
     steps:
       # Execute IssueOps branch deployment logic, hooray!
       # This will be used to "gate" all future steps below and conditionally trigger steps/deployments
-      - name: branch-deploy
+      - uses: github/branch-deploy@vX.X.X
         id: branch-deploy
-        uses: github/branch-deploy@v8.0.0
         with:
           trigger: ".deploy"
           reaction: "eyes"
           environment: "production"
           stable_branch: "main"
 
-        # Deploy our branch via SSH remote commands
-  deploy:
-      runs-on: ubuntu-latest
+      # Run your deployment logic for your project here
+      #runs-on: ubuntu-latest
 
-      steps:
+      #steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -41,28 +60,28 @@ jobs:
           echo "Continue? : ${{ steps.branch-deploy.outputs.continue }}"
 
       - name: SSH Remote Deploy
-        if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        #if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
         uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883 # pin@v0.1.6
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: "172.232.217.78"
+          username: "root"
+          #key: ${{ secrets.SSH_KEY }}
+          password: "NARTE@2023#"
+          port: "22"
           script_stop: true
           script: |
-            # Connect to the application server via SSH
-            ssh -p ${{ secrets.SSH_PORT }} -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.APP_SERVER_USERNAME }}@${{ secrets.APP_SERVER_HOST }} << EOF
-
             # Pull the Docker image from the container registry
-            docker pull [registry_address]/[image_name]:[image_tag]
+            docker pull ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
 
             # Stop and remove any existing container
-            docker stop [container_name] || true
-            docker rm [container_name] || true
+            #docker stop [container_name] || true
+            #docker rm [container_name] || true
 
             # Run a container using the pulled image
-            docker run -d --name [container_name] [registry_address]/[image_name]:[image_tag]
+            docker run ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
+            
 
             # Cleanup
             exit
             EOF
+          
