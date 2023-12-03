@@ -71,14 +71,14 @@ jobs:
           script_stop: true
           script: |
             # Pull the Docker image from the container registry
-            docker pull ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
+            docker pull ghcr.io/nora-alshareef/publish-to-gcr:latest
 
             # Stop and remove any existing container
             #docker stop [container_name] || true
             #docker rm [container_name] || true
 
             # Run a container using the pulled image
-            docker run ghcr.io/nora-alshareef/publish-to-gcr:main-2023-11-29
+            docker run ghcr.io/nora-alshareef/publish-to-gcr:latest
             
 
             # Cleanup
