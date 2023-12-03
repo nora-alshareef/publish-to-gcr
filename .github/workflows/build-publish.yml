@@ -2,7 +2,7 @@ name: "build-docker"
 
 on:
   push:
-    branches: [ "build" ]
+    branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v1.0.0' ]
   pull_request:
