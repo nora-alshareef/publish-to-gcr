@@ -44,6 +44,9 @@ jobs:
         id: branch-deploy
         with:
           trigger: ".deploy"
+          reaction: "eyes"
+          environment: "production"
+          stable_branch: "main"
 
       # Run your deployment logic for your project here
       #runs-on: ubuntu-latest
