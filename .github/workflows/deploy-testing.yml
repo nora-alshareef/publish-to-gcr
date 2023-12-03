@@ -1,4 +1,4 @@
-name: "Deploy Docker Image To Test Env"
+name: "deploy-test"
 on:
  push:
    branches:
