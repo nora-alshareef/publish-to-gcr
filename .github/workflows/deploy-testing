@@ -1,0 +1,38 @@
+name: "Deploy Docker Image To Test Env"
+on:
+ push:
+   branches:
+      - testing
+   jobs:
+  deploy:
+    if: ${{ github.event.issue.pull_request }} # only run on pull request comments
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: SSH Remote Deploy
+        #if: ${{ steps.branch-deploy.outputs.continue == 'true' }}
+        uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883 # pin@v0.1.6
+        with:
+          host: "172.232.207.222"
+          username: "root"
+          #key: ${{ secrets.SSH_KEY }}
+          password: "NARTE@2023#"
+          port: "22"
+          script_stop: true
+          script: |
+            # Pull the Docker image from the container registry
+            docker pull ghcr.io/nora-alshareef/publish-to-gcr:testing-2023-11-29
+
+            # Stop and remove any existing container
+            #docker stop [container_name] || true
+            #docker rm [container_name] || true
+
+            # Run a container using the pulled image
+            docker run ghcr.io/nora-alshareef/publish-to-gcr:testing-2023-11-29
+            
+
+            # Cleanup
+            exit
+            EOF
